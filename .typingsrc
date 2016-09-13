@@ -1,0 +1,2 @@
+ proxy=http://proxy35-cdb02.ad.campus-eni.fr:8080
+ rejectUnauthorized=false
