@@ -8,8 +8,7 @@ import { HeroService } from './hero.service';
     selector: 'my-heroes',
     templateUrl: 'app/heroes.component.html',
     styleUrls: ['app/heroes.component.css'],
-    providers: [HeroService]
-
+    providers: [HeroService],  
 })
 
 export class HeroesComponent implements OnInit{ 

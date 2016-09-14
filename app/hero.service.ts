@@ -7,22 +7,36 @@ import { Hero } from './hero';
 
 @Injectable()
 export class HeroService {
-    private heroesUrl = 'app/heroes';  // URL to web api
+    private heroesUrl = 'http://localhost:4512/heroes';  // URL to web api
+    private headers = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) { }
 
     getHeroes(): Promise<Hero[]> {
     return this.http.get(this.heroesUrl)
                 .toPromise()
-                .then(response => response.json().data as Hero[])
+                .then(function(response){
+                    let data = response.json().message;
+                    let heroes:Hero[] = [];
+                    for(var i = 0; i < data.length; i++){
+                        var hero: Hero = new Hero();
+                        hero.id = data[i]._id;
+                        hero.name = data[i].nom;
+                        heroes.push(hero); 
+                    }
+                    return heroes;
+                })
+                //.then(response => response.json().data as Hero[])
                 .catch(this.handleError);
     }
-    getHero(id: number): Promise<Hero> {
+    getHero(id: string): Promise<Hero> {
         return this.getHeroes()
-             .then(heroes => heroes.find(hero => hero.id === id));
+             .then(function(heroes){
+                 //heroes => heroes.find(hero => hero.id === id));
+                 console.log(heroes);
+                 return heroes.find(hero => hero.id === id);
+        });
     }
-
-    private headers = new Headers({'Content-Type': 'application/json'});
 
     update(hero: Hero): Promise<Hero> {
         const url = `${this.heroesUrl}/${hero.id}`;
@@ -37,11 +51,18 @@ export class HeroService {
         return this.http
             .post(this.heroesUrl, JSON.stringify({name: name}), {headers: this.headers})
             .toPromise()
-            .then(res => res.json().data)
+            .then(function(res){
+                 let data = res.json().message;
+                 var hero: Hero = new Hero();
+                 hero.id = data._id;
+                 hero.name = data.nom;
+                 return hero;
+            })
+            //.then(res => res.json().data)
             .catch(this.handleError);
     }
 
-    delete(id: number): Promise<void> {
+    delete(id: string): Promise<void> {
         let url = `${this.heroesUrl}/${id}`;
         return this.http.delete(url, {headers: this.headers})
             .toPromise()

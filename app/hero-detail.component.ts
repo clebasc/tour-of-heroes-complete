@@ -19,8 +19,8 @@ export class HeroDetailComponent implements OnInit{
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
-            let id = +params['id']; // + is for convert String to Int. Route parameters are always strings
-            this.heroService.getHero(id)
+            //let id = +params['id']; // + is for convert String to Int. Route parameters are always strings
+            this.heroService.getHero(params['id'])
             .then(hero => this.hero = hero);
         });
     }
