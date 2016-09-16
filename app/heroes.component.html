@@ -1,6 +1,6 @@
 <h2>My Heroes</h2>
     <div>
-        <label>Hero name:</label> <input #heroName />
+        <label>Hero name:</label> <input #heroName maxlength="15" />
         <button (click)="add(heroName.value); heroName.value=''">
             Add
         </button>
